@@ -3,11 +3,11 @@ open Base
 let xlen = 3840 
 let ylen = 2160
 
-let get_rock prob =
+let get_rock_vert prob =
   let open Float.O in
   Array.init xlen ~f:(fun _ -> Array.init ylen ~f:(fun _ -> Random.float 1.0 <= prob))
 
-let pour_water rock =
+let pour_water_vert_4n rock =
   let water = Array.init xlen ~f:(fun _ -> Array.create ~len:ylen false) in
   let rec propagate = function
   | [] -> ()
@@ -19,10 +19,24 @@ let pour_water rock =
   for i = 0 to xlen - 1 do propagate [i, 0] done;
   water
 
+let pour_water_vert_8n rock =
+  let water = Array.init xlen ~f:(fun _ -> Array.create ~len:ylen false) in
+  let rec propagate = function
+  | [] -> ()
+  | (i, j)::rest ->
+      if i >= 0 && j >= 0 && i < xlen && j < ylen && not rock.(i).(j) && not water.(i).(j) then (
+        water.(i).(j) <- true;
+        let more = List.concat_map [-1; 0; 1] ~f:(fun di -> List.map [-1; 0; 1] ~f:(fun dj ->
+          (i + di, j + dj))) in
+        propagate (more @ rest)
+      ) else propagate rest in
+  for i = 0 to xlen - 1 do propagate [i, 0] done;
+  water
+
 let has_propagated water =
   Array.exists water ~f:(fun column -> column.(ylen - 1))
 
-let () =
+let main get_rock pour_water =
   let prob = ref 0.5 in
   let delta = ref 0.1 in
   for picture = 1 to 50 do
@@ -56,3 +70,9 @@ let () =
     if Int.(2 * !percolated > !total) then prob := !prob + !delta else prob := !prob - !delta;
     Jpeg.save ("images/Percolation_no_" ^ Int.to_string picture ^ ".jpg") [] (Images.Rgb24 rgb_image);
   done
+
+let () = (* main get_rock_vert *) ignore pour_water_vert_4n
+
+let () = main get_rock_vert pour_water_vert_8n
+
+
