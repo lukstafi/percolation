@@ -1,0 +1,5 @@
+(executable
+ (public_name percolation)
+ (name main)
+ (libraries base stdio camlimages.all percolation)
+ (modes exe))
