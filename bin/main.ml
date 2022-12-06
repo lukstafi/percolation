@@ -38,7 +38,7 @@ let pour_water_vert_8n rock =
   for i = 0 to xlen - 1 do propagate [i, 0] done;
   water
 
-let pour_water_edge_8n rock =
+let pour_water_edge n8_vs_n4 rock =
   let water = Array.init xlen ~f:(fun _ -> Array.create ~len:ylen false) in
   let rec propagate = function
   | [] -> ()
@@ -47,6 +47,7 @@ let pour_water_edge_8n rock =
           water.(i).(j) <- true;
           let more = List.concat_map [-1; 0; 1] ~f:(fun di -> List.concat_map [-1; 0; 1] ~f:(fun dj ->
             if i + di < 0 || j + dj < 0 then []
+            else if not n8_vs_n4 && (di + dj = 0 || di + dj = 2) then []
             else if rock.(i + Int.min di 0).(j + Int.min dj 0).(Int.abs di).(Int.abs dj) then []
             else [i + di, j + dj])) in
           propagate (more @ rest)
@@ -57,7 +58,7 @@ let pour_water_edge_8n rock =
 let has_propagated water =
   Array.exists water ~f:(fun column -> column.(ylen - 1))
 
-let main get_rock pour_water prob0 delta0 =
+let main get_rock pour_water ~prob0 ~delta0 =
   let prob = ref prob0 in
   let delta = ref delta0 in
   for picture = 1 to 50 do
@@ -88,13 +89,15 @@ let main get_rock pour_water prob0 delta0 =
     (* delta := !delta * 0.9; *)
     delta := delta0 / Float.of_int picture;
     if Int.(2 * !percolated > !total) then prob := !prob + !delta else prob := !prob - !delta;
-    Jpeg.save ("images/Percolation_no_" ^ Int.to_string Int.(picture+50) ^ ".jpg") [] (Images.Rgb24 rgb_image);
+    Jpeg.save ("images/Percolation_no_" ^ Int.to_string picture ^ ".jpg") [] (Images.Rgb24 rgb_image);
   done
 
 let () = (* main get_rock_vert *) ignore (pour_water_vert_4n, 0.5, 0.1)
 
 let () = (* main *) ignore (get_rock_vert, pour_water_vert_8n, 0.5, 0.1)
 
-(* let () = main get_rock_edge pour_water_edge_8n 0.5 0.4 *)
+(* let () = main get_rock_edge (pour_water_edge true) ~prob0:0.5 ~delta0:0.4 *)
 
-let () = main get_rock_edge pour_water_edge_8n 0.7 0.01
+(* let () = main get_rock_edge (pour_water_edge true) ~prob0:0.7 ~delta0:0.01 *)
+
+let () = main get_rock_edge (pour_water_edge false) ~prob0:0.5 ~delta0:0.1

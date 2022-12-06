@@ -31,3 +31,13 @@ The generated images use 6 independent layers of percolation.
 ![8 neighbors random edges example 3](images/Neighbors_8_rand_edges_ex_3.jpg)
 
 ![8 neighbors random edges example 4](images/Neighbors_8_rand_edges_ex_4.jpg)
+
+## 4 neighbors, randomized edges
+
+![4 neighbors random edges example 1](images/Neighbors_4_rand_edges_ex_1.jpg)
+
+![4 neighbors random edges example 2](images/Neighbors_4_rand_edges_ex_2.jpg)
+
+![4 neighbors random edges example 3](images/Neighbors_4_rand_edges_ex_3.jpg)
+
+![4 neighbors random edges example 4](images/Neighbors_4_rand_edges_ex_4.jpg)
