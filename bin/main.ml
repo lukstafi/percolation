@@ -24,6 +24,22 @@ let pour_water_vert_4n rock =
   for i = 0 to xlen - 1 do propagate [i, 0] done;
   water
 
+  
+let pour_water_vert_3n ~is_vertical rock =
+  let water = Array.init xlen ~f:(fun _ -> Array.create ~len:ylen false) in
+  let rec propagate = function
+  | [] -> ()
+  | (i, j)::rest ->
+      if i >= 0 && j >= 0 && i < xlen && j < ylen && not rock.(i).(j) && not water.(i).(j) then (
+        water.(i).(j) <- true;
+        let sides = if is_vertical then [(i, j - 1); (i, j + 1)] else [(i - 1, j); (i + 1, j)] in
+        let top = if is_vertical then if j % 2 = 0 then [i + 1, j] else [i - 1, j] else
+          if i % 2 = 0 then [i, j + 1] else [i, j - 1] in
+        propagate (top @ sides @ rest)
+      ) else propagate rest in
+  for i = 0 to xlen - 1 do propagate [i, 0] done;
+  water
+
 let pour_water_vert_8n rock =
   let water = Array.init xlen ~f:(fun _ -> Array.create ~len:ylen false) in
   let rec propagate = function
@@ -89,7 +105,7 @@ let main get_rock pour_water ~prob0 ~delta0 =
     (* delta := !delta * 0.9; *)
     delta := delta0 / Float.of_int picture;
     if Int.(2 * !percolated > !total) then prob := !prob + !delta else prob := !prob - !delta;
-    Jpeg.save ("images/Percolation_no_" ^ Int.to_string picture ^ ".jpg") [] (Images.Rgb24 rgb_image);
+    Jpeg.save ("images/Percolation_no_" ^ Int.(to_string @@ picture + 100) ^ ".jpg") [] (Images.Rgb24 rgb_image);
   done
 
 let () = (* main get_rock_vert *) ignore (pour_water_vert_4n, 0.5, 0.1)
@@ -100,4 +116,17 @@ let () = (* main *) ignore (get_rock_vert, pour_water_vert_8n, 0.5, 0.1)
 
 (* let () = main get_rock_edge (pour_water_edge true) ~prob0:0.7 ~delta0:0.01 *)
 
-let () = main get_rock_edge (pour_water_edge false) ~prob0:0.5 ~delta0:0.1
+let () = (* main *) ignore (get_rock_edge, (pour_water_edge false)) (* ~prob0:0.5 ~delta0:0.1 *)
+
+(* let () = main get_rock_vert (pour_water_vert_3n ~is_vertical:false) ~prob0:0.5 ~delta0:0.3 *)
+
+(* let () = main get_rock_vert (pour_water_vert_3n ~is_vertical:false) ~prob0:0.31 ~delta0:0.005 *)
+
+(* let () = main get_rock_vert (pour_water_vert_3n ~is_vertical:false) ~prob0:0.327 ~delta0:0.01 *)
+
+(* let () = main get_rock_vert (pour_water_vert_3n ~is_vertical:true) ~prob0:0.5 ~delta0:0.1 *)
+
+(* let () = main get_rock_vert (pour_water_vert_3n ~is_vertical:true) ~prob0:0.322 ~delta0:0.003 *)
+
+let () = main get_rock_vert (pour_water_vert_3n ~is_vertical:true) ~prob0:0.328 ~delta0:0.003
+
