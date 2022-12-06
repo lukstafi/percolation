@@ -59,3 +59,20 @@ The generated images use 6 independent layers of percolation.
 ![3 neighbors  aligned vertically random vertices example 3](images/Neighbors_3_vertical_rand_vertices_ex_3.jpg)
 
 ![3 neighbors  aligned vertically random vertices example 4](images/Neighbors_3_vertical_rand_vertices_ex_4.jpg)
+
+## 3 neighbors aligned vertically, randomized edges
+
+![3 neighbors  aligned vertically random edges example 1](images/Neighbors_3_vertical_rand_edges_ex_1.jpg)
+
+![3 neighbors  aligned vertically random edges example 2](images/Neighbors_3_vertical_rand_edges_ex_2.jpg)
+
+![3 neighbors  aligned vertically random edges example 3](images/Neighbors_3_vertical_rand_edges_ex_3.jpg)
+
+## 3 neighbors aligned horizontally, randomized edges
+
+![3 neighbors  aligned horizontally random edges example 1](images/Neighbors_3_horizontal_rand_edges_ex_1.jpg)
+
+![3 neighbors  aligned horizontally random edges example 2](images/Neighbors_3_horizontal_rand_edges_ex_2.jpg)
+
+![3 neighbors  aligned horizontally random edges example 3](images/Neighbors_3_horizontal_rand_edges_ex_3.jpg)
+
