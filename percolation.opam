@@ -12,6 +12,7 @@ bug-reports: "https://github.com/lukstafi/percolation/issues"
 depends: [
   "ocaml"
   "dune" {>= "3.6"}
+  "camlimages"
   "odoc" {with-doc}
 ]
 build: [
